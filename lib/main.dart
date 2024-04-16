@@ -34,13 +34,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var msg = "";
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    msg = "";
-  }
-
   bool pad_c = false;
   bool pad_d = false;
   bool pad_e = false;
@@ -48,8 +41,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final player_pad_c = AudioPlayer();
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    player_pad_c.stop();
+  }
+
   void _play_c() {
-    player_pad_c.setVolume(0);
     player_pad_c.play(AssetSource('foundations/c.mp3'));
     _playing_c(player_pad_c);
 
@@ -62,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {
           audioplayer.setVolume((i));
         });
-        print("Aumentando C Pad ${audioplayer.volume}");
+        print("Aumentando C Pad ${(audioplayer.volume).toStringAsFixed(1)}");
       });
       if (pad_c == false) {
         break;
@@ -82,20 +81,33 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {
           audioplayer.setVolume((i));
         });
-        print("Diminuindo Pad C ${audioplayer.volume}");
+        print("Diminuindo Pad C ${(audioplayer.volume).toStringAsFixed(1)}");
       });
+      if (pad_c == true) {
+        break;
+      }
+      if ((audioplayer.volume).toStringAsFixed(1) == "0.0") {
+        audioplayer.stop();
+        print("C Parado");
+      }
     }
-    print("C Parado");
-    audioplayer.stop();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
+      decoration: const BoxDecoration(
+        color: Colors.black,
+        image: DecorationImage(
+          image: AssetImage('assets/pad.jpg'),
+          opacity:
+              0.2, // Substitua 'assets/imagem.png' pelo caminho da sua imagem
+          fit: BoxFit.cover, // Ajuste para cobrir o contêiner
+        ),
+      ),
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-      color: Colors.black,
       child: Padding(
         padding: const EdgeInsets.all(36.0),
         child: Column(
