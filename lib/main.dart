@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,15 +25,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -40,7 +32,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   var msg = "";
 
   @override
@@ -50,25 +41,56 @@ class _MyHomePageState extends State<MyHomePage> {
     msg = "";
   }
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  bool pad_c = false;
+  bool pad_d = false;
+  bool pad_e = false;
+  bool pad_f = false;
+
+  final player_pad_c = AudioPlayer();
+
+  void _play_c() {
+    player_pad_c.setVolume(0);
+    player_pad_c.play(AssetSource('foundations/c.mp3'));
+    _playing_c(player_pad_c);
+
+    print("Playing C");
+  }
+
+  Future<void> _playing_c(AudioPlayer audioplayer) async {
+    for (double i = audioplayer.volume; i <= 1; i += 0.1) {
+      await Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          audioplayer.setVolume((i));
+        });
+        print("Aumentando C Pad ${audioplayer.volume}");
+      });
+      if (pad_c == false) {
+        break;
+      }
+    }
+  }
+
+  void _stop_c() {
+    _stoping_c(player_pad_c);
+
+    print("Stoping C");
+  }
+
+  Future<void> _stoping_c(AudioPlayer audioplayer) async {
+    for (double i = audioplayer.volume; i >= 0; i -= 0.1) {
+      await Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          audioplayer.setVolume((i));
+        });
+        print("Diminuindo Pad C ${audioplayer.volume}");
+      });
+    }
+    print("C Parado");
+    audioplayer.stop();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
         body: Container(
       width: MediaQuery.of(context).size.width,
@@ -95,6 +117,21 @@ class _MyHomePageState extends State<MyHomePage> {
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
                             onTap: () {
+                              if (pad_c != true) {
+                                setState(() {
+                                  pad_d = false;
+                                  pad_e = false;
+                                  pad_f = false;
+                                });
+                              }
+                              setState(() {
+                                if (pad_c == true) {
+                                  _stop_c();
+                                } else {
+                                  _play_c();
+                                }
+                                pad_c = !pad_c;
+                              });
                               if (msg == "C") {
                                 setState(() {
                                   msg = "Parando C";
@@ -114,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         EdgeInsets.only(right: 12, bottom: 12),
                                     decoration: BoxDecoration(
                                         border: Border.all(
-                                            color: (msg == "C"
+                                            color: (pad_c == true
                                                 ? Colors.white
                                                 : Colors.black)),
                                         image: DecorationImage(
@@ -132,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     children: [
                                       Container(
                                           margin: EdgeInsets.only(right: 8),
-                                          child: (msg == "C")
+                                          child: (pad_c)
                                               ? Image.asset('assets/stop.png')
                                               : Image.asset('assets/play.png')),
                                       Text(
@@ -151,6 +188,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
                             onTap: () {
+                              if (pad_d != true) {
+                                setState(() {
+                                  pad_c = false;
+                                  pad_e = false;
+                                  pad_f = false;
+                                });
+                              }
+                              setState(() {
+                                pad_d = !pad_d;
+                              });
                               if (msg == "D") {
                                 setState(() {
                                   msg = "Parando D";
@@ -170,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         EdgeInsets.only(right: 12, bottom: 12),
                                     decoration: BoxDecoration(
                                         border: Border.all(
-                                            color: (msg == "D"
+                                            color: (pad_d
                                                 ? Colors.white
                                                 : Colors.black)),
                                         image: DecorationImage(
@@ -188,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     children: [
                                       Container(
                                           margin: EdgeInsets.only(right: 8),
-                                          child: (msg == "D")
+                                          child: (pad_d == true)
                                               ? Image.asset('assets/stop.png')
                                               : Image.asset('assets/play.png')),
                                       Text(
@@ -207,6 +254,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
                             onTap: () {
+                              if (pad_e != true) {
+                                setState(() {
+                                  pad_c = false;
+                                  pad_d = false;
+                                  pad_f = false;
+                                });
+                              }
+                              setState(() {
+                                pad_e = !pad_e;
+                              });
                               if (msg == "E") {
                                 setState(() {
                                   msg = "Parando E";
@@ -226,7 +283,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         EdgeInsets.only(right: 12, bottom: 12),
                                     decoration: BoxDecoration(
                                         border: Border.all(
-                                            color: (msg == "E"
+                                            color: (pad_e
                                                 ? Colors.white
                                                 : Colors.black)),
                                         image: DecorationImage(
@@ -244,7 +301,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     children: [
                                       Container(
                                           margin: EdgeInsets.only(right: 8),
-                                          child: (msg == "E")
+                                          child: (pad_e)
                                               ? Image.asset('assets/stop.png')
                                               : Image.asset('assets/play.png')),
                                       Text(
@@ -263,6 +320,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
                             onTap: () {
+                              if (pad_f != true) {
+                                setState(() {
+                                  pad_c = false;
+                                  pad_d = false;
+                                  pad_e = false;
+                                });
+                              }
+                              setState(() {
+                                pad_f = !pad_f;
+                              });
                               if (msg == "F") {
                                 setState(() {
                                   msg = "Parando F";
@@ -282,7 +349,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         EdgeInsets.only(right: 12, bottom: 12),
                                     decoration: BoxDecoration(
                                         border: Border.all(
-                                            color: (msg == "F"
+                                            color: (pad_f
                                                 ? Colors.white
                                                 : Colors.black)),
                                         image: DecorationImage(
@@ -300,7 +367,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     children: [
                                       Container(
                                           margin: EdgeInsets.only(right: 8),
-                                          child: (msg == "F")
+                                          child: (pad_f == true)
                                               ? Image.asset('assets/stop.png')
                                               : Image.asset('assets/play.png')),
                                       Text(
@@ -321,10 +388,31 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            Text(
-              msg,
-              style: TextStyle(color: Colors.white, fontSize: 56),
+            Row(
+              children: [
+                Text(
+                  "Pad C: $pad_c ",
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+                Text(
+                  "Pad D: $pad_d ",
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+                Text(
+                  "Pad E: $pad_e ",
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+                Text(
+                  "Pad F: $pad_f ",
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+              ],
             ),
+            (pad_c == true || pad_d == true || pad_e == true || pad_f == true)
+                ? Image.asset(
+                    'assets/stop.png',
+                  )
+                : Image.asset('assets/play.png')
           ],
         ),
       ),
