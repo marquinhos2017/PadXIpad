@@ -40,6 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool pad_f = false;
 
   final player_pad_c = AudioPlayer();
+  final player_pad_d = AudioPlayer();
 
   @override
   void initState() {
@@ -93,6 +94,51 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void _play_d() {
+    player_pad_d.play(AssetSource('foundations/d.mp3'));
+    _playing_d(player_pad_d);
+
+    print("Playing D");
+  }
+
+  Future<void> _playing_d(AudioPlayer audioplayer) async {
+    for (double i = audioplayer.volume; i <= 1; i += 0.1) {
+      await Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          audioplayer.setVolume((i));
+        });
+        print("Aumentando D Pad ${(audioplayer.volume).toStringAsFixed(1)}");
+      });
+      if (pad_d == false) {
+        break;
+      }
+    }
+  }
+
+  void _stop_d() {
+    _stoping_d(player_pad_d);
+
+    print("Stoping D");
+  }
+
+  Future<void> _stoping_d(AudioPlayer audioplayer) async {
+    for (double i = audioplayer.volume; i >= 0; i -= 0.1) {
+      await Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          audioplayer.setVolume((i));
+        });
+        print("Diminuindo Pad D ${(audioplayer.volume).toStringAsFixed(1)}");
+      });
+      if (pad_d == true) {
+        break;
+      }
+      if ((audioplayer.volume).toStringAsFixed(1) == "0.0") {
+        audioplayer.stop();
+        print("D Parado");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,6 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   _stop_c();
                                 } else {
                                   _play_c();
+                                  _stoping_d(player_pad_d);
                                 }
                                 pad_c = !pad_c;
                               });
@@ -208,6 +255,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                 });
                               }
                               setState(() {
+                                if (pad_d == true) {
+                                  _stop_d();
+                                } else {
+                                  _play_d();
+                                  _stoping_c(player_pad_c);
+                                }
                                 pad_d = !pad_d;
                               });
                               if (msg == "D") {
