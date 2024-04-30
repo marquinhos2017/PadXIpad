@@ -41,6 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final player_pad_c = AudioPlayer();
   final player_pad_d = AudioPlayer();
+  final player_pad_e = AudioPlayer();
 
   @override
   void initState() {
@@ -139,6 +140,51 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void _play_e() {
+    player_pad_e.play(AssetSource('foundations/e.mp3'));
+    _playing_e(player_pad_e);
+
+    print("Playing E");
+  }
+
+  Future<void> _playing_e(AudioPlayer audioplayer) async {
+    for (double i = audioplayer.volume; i <= 1; i += 0.1) {
+      await Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          audioplayer.setVolume((i));
+        });
+        print("Aumentando E Pad ${(audioplayer.volume).toStringAsFixed(1)}");
+      });
+      if (pad_e == false) {
+        break;
+      }
+    }
+  }
+
+  void _stop_e() {
+    _stoping_e(player_pad_e);
+
+    print("Stoping E");
+  }
+
+  Future<void> _stoping_e(AudioPlayer audioplayer) async {
+    for (double i = audioplayer.volume; i >= 0; i -= 0.1) {
+      await Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          audioplayer.setVolume((i));
+        });
+        print("Diminuindo Pad E ${(audioplayer.volume).toStringAsFixed(1)}");
+      });
+      if (pad_c == true) {
+        break;
+      }
+      if ((audioplayer.volume).toStringAsFixed(1) == "0.0") {
+        audioplayer.stop();
+        print("E Parado");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -188,6 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 } else {
                                   _play_c();
                                   _stoping_d(player_pad_d);
+                                  _stoping_e(player_pad_e);
                                 }
                                 pad_c = !pad_c;
                               });
@@ -260,6 +307,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 } else {
                                   _play_d();
                                   _stoping_c(player_pad_c);
+                                  _stoping_e(player_pad_e);
                                 }
                                 pad_d = !pad_d;
                               });
@@ -327,6 +375,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                 });
                               }
                               setState(() {
+                                if (pad_e == true) {
+                                  _stop_e();
+                                } else {
+                                  _play_e();
+                                  _stoping_c(player_pad_c);
+                                  _stoping_d(player_pad_d);
+                                }
                                 pad_e = !pad_e;
                               });
                               if (msg == "E") {
