@@ -37,7 +37,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool pad_c = false;
   bool pad_d = false;
   bool pad_e = false;
-  bool pad_f = false;
 
   final player_pad_c = AudioPlayer();
   final player_pad_d = AudioPlayer();
@@ -225,7 +224,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 setState(() {
                                   pad_d = false;
                                   pad_e = false;
-                                  pad_f = false;
                                 });
                               }
                               setState(() {
@@ -298,7 +296,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 setState(() {
                                   pad_c = false;
                                   pad_e = false;
-                                  pad_f = false;
                                 });
                               }
                               setState(() {
@@ -371,7 +368,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 setState(() {
                                   pad_c = false;
                                   pad_d = false;
-                                  pad_f = false;
                                 });
                               }
                               setState(() {
@@ -436,72 +432,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              if (pad_f != true) {
-                                setState(() {
-                                  pad_c = false;
-                                  pad_d = false;
-                                  pad_e = false;
-                                });
-                              }
-                              setState(() {
-                                pad_f = !pad_f;
-                              });
-                              if (msg == "F") {
-                                setState(() {
-                                  msg = "Parando F";
-                                });
-                              } else {
-                                setState(() {
-                                  msg = "F";
-                                });
-                              }
-                            },
-                            child: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    margin:
-                                        EdgeInsets.only(right: 12, bottom: 12),
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: (pad_f
-                                                ? Colors.white
-                                                : Colors.black)),
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/pad.jpg'), // Substitua 'assets/imagem.png' pelo caminho da sua imagem
-                                          fit: BoxFit
-                                              .cover, // Ajuste para cobrir o contêiner
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    width: 300,
-                                    height: 180,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                          margin: EdgeInsets.only(right: 8),
-                                          child: (pad_f == true)
-                                              ? Image.asset('assets/stop.png')
-                                              : Image.asset('assets/play.png')),
-                                      Text(
-                                        "Paradise F",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
                       ]),
                     ],
                   ),
@@ -522,13 +452,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   "Pad E: $pad_e ",
                   style: TextStyle(color: Colors.white, fontSize: 24),
                 ),
-                Text(
-                  "Pad F: $pad_f ",
-                  style: TextStyle(color: Colors.white, fontSize: 24),
-                ),
               ],
             ),
-            (pad_c == true || pad_d == true || pad_e == true || pad_f == true)
+            (pad_c == true || pad_d == true || pad_e == true)
                 ? Image.asset(
                     'assets/stop.png',
                   )
